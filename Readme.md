@@ -16,11 +16,30 @@
 
 > Replace eu-central-1 with your desired region and configure the security group rules according to your needs.
 
+**Login to ECR:**
 
-**Configure images:**
+> Use the AWS CLI to log in to your ECR registry. Replace <your-aws-region> and <your-aws-account-id> with your specific information:
 
-> Inside the nginx and tomcat directories, placed Dockerfiles and optional config file for Nginx and .war app for Tomcat.
+`aws ecr get-login-password --region <your-aws-region> | docker login --username AWS --password-stdin <your-aws-account-id>.dkr.ecr.<your-aws-region>.amazonaws.com`
 
+**Build images:**
+
+> Inside the nginx and tomcat directories, placed Dockerfiles and optional config file for Nginx and .war app for Tomcat. Build localy with command:
+
+`docker build -t nginx .`
+`docker build -t tomcat .`
+
+**Tag images:**
+
+> After the build completes, tag image so you can push the image to ECR repository.
+
+`docker tag nginx:latest <your-aws-account-id>.dkr.ecr.<your-aws-region>.amazonaws.com/nginx:latest`
+
+**Push the Docker Image to ECR:**
+
+> Push the tagged Docker image to your ECR repository.
+
+`docker push <your-aws-account-id>.dkr.ecr.<your-aws-region>.amazonaws.com/nginx:latest`
 
 **Deploy Resources:**
 
