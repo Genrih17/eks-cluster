@@ -22,11 +22,16 @@
 
 `aws ecr get-login-password --region <your-aws-region> | docker login --username AWS --password-stdin <your-aws-account-id>.dkr.ecr.<your-aws-region>.amazonaws.com`
 
+
+![image](https://github.com/Genrih17/eks-cluster/assets/84070046/d3f7369c-9b89-4443-87e8-158dc669a716)
+
+
 **Build images:**
 
 > Inside the nginx and tomcat directories, placed Dockerfiles and optional config file for Nginx and .war app for Tomcat. Build localy with command:
 
 `docker build -t nginx .`
+
 `docker build -t tomcat .`
 
 **Tag images:**
@@ -41,13 +46,19 @@
 
 `docker push <your-aws-account-id>.dkr.ecr.<your-aws-region>.amazonaws.com/nginx:latest`
 
+![image](https://github.com/Genrih17/eks-cluster/assets/84070046/6ad78a24-8851-440e-8ddb-16248523c81f)
+
+
+![image](https://github.com/Genrih17/eks-cluster/assets/84070046/e7321be8-27fb-4926-8ef4-0b8df5a3ac65)
+
 **Deploy Resources:**
 
-> Run the following commands in your eks-cluster directory:
+> Run terraform commands in eks-cluster directory:
 
 `terraform init`
 
 `terraform apply`
+
 
 **Deploy Kubernetes Resources:**
 
