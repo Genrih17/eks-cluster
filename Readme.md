@@ -73,8 +73,11 @@ kubectl apply -f deploy/nginx-tomcat-deployment.yaml
 
 echo "Stage: kubectl deploy service:"
 kubectl apply -f deploy/nginx-service.yaml
-kubectl get ingress/nginx-service
+
+echo "You can check nginx container's index.html page at LB DNSname:"
+kubectl get services nginx-service --output jsonpath='{.status.loadBalancer.ingress[0].hostname}'
 ```
+
 > I have ommit the '--auto-approve' flag just to you will see what resourses will be created.
 
 ## Or you can deploy it manually by following steps:
