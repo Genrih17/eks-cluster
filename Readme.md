@@ -107,6 +107,7 @@ spec:
 
 ```kubectl apply -f nginx-tomcat-deployment.yaml```
 
+![image](https://github.com/Genrih17/eks-cluster/assets/84070046/e66a5a82-3e06-4e21-ae5d-6cc4ac4c5ffe)
 
 **Create Services:**
 
@@ -128,5 +129,9 @@ spec:
 **Apply the Service using kubectl:**
 
 ```kubectl apply -f nginx-service.yaml```
+![image](https://github.com/Genrih17/eks-cluster/assets/84070046/d04d8d94-0b10-49de-9afc-2fea4a4b2dcf)
 
 We should have an EKS cluster with a multi-container pod running Nginx and Tomcat, with Nginx accessible from the internet via a LoadBalancer service.
+
+Using LoadBalanser address we can check the result:
+![image](https://github.com/Genrih17/eks-cluster/assets/84070046/dd1bf2c2-79e0-446e-a2e6-27c2a6ba90f3)
