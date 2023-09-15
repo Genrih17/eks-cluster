@@ -1,10 +1,12 @@
 # Home task for Ops
 
-## Prepare:
+
 
  - example of multi container pod deployment with at least one dockerfile and container registry other than docker.io 
 
  - a way to deploy eks cluster with either terraform or cloudformation
+
+#
 
 
 Terraform will creates follow resources:
@@ -13,6 +15,9 @@ Terraform will creates follow resources:
  - Cluster with nodegroup (based on t3.small instance type);
  - Pod with nginx and tomcat containers;
  - Service nginx-service to provide acces to nginx on HTTP port.
+#
+
+   ## Prepare:
 
 **Configure AWS Credentials:**
 
