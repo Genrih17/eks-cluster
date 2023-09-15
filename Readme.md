@@ -1,6 +1,6 @@
 # Home task for Ops
 
-### Prepare:
+## Prepare:
 
  - example of multi container pod deployment with at least one dockerfile and container registry other than docker.io 
 
@@ -51,7 +51,34 @@
 
 ![image](https://github.com/Genrih17/eks-cluster/assets/84070046/e7321be8-27fb-4926-8ef4-0b8df5a3ac65)
 
-**Deploy Resources:**
+## Deploy Resources:
+
+**Provide execution rigth with cmod to ./eks_buld.sh scrips and execute it with `./eks_build.sh`.**
+
+This script contains steps with commands:
+
+```
+#! /bin/bash
+echo "Stage: terraform init:"
+terraform init
+
+echo "Stage: terraform apply:"
+terraform apply
+
+echo "Stage: kubectl config:"
+aws eks --region $(terraform output -raw region) update-kubeconfig --name $(terraform output -raw cluster_name)
+
+echo "Stage: kubectl deploy pod:"
+kubectl apply -f deploy/nginx-tomcat-deployment.yaml
+
+echo "Stage: kubectl deploy service:"
+kubectl apply -f deploy/nginx-service.yaml
+kubectl get ingress/nginx-service
+```
+> I have ommit the '--auto-approve' flag just to you will see what resourses will be created.
+
+## Or you can deploy it manually by following steps:
+
 
 > Run terraform commands in eks-cluster directory:
 
@@ -70,31 +97,25 @@
 
 **Deploy Kubernetes Resources:**
 
-> After the Terraform deployment is complete, deploy Kubernetes resources, including Pods, Deployments, and Services.
+> After the Terraform deployment is complete, deploy Kubernetes resources.
 ```
-apiVersion: apps/v1
-kind: Deployment
+kind: Pod
+apiVersion: v1
 metadata:
-  name: nginx-tomcat-deployment
+  name: testpod
+  labels:
+    app: nginx-tomcat
 spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: nginx-tomcat
-  template:
-    metadata:
-      labels:
-        app: nginx-tomcat
-    spec:
-      containers:
-        - name: nginx-container
-          image: <ecr-url>/nginx:latest
-          ports:
-            - containerPort: 80
-        - name: tomcat-container
-          image: <ecr-url>/tomcat:latest
-          ports:
-            - containerPort: 8080
+  containers:
+    - name: nginx
+      image: <ecr-url>/nginx
+      ports:
+        - containerPort: 80
+    - name: tomcat
+      image: <ecr-url>/tomcat
+      ports:
+        - containerPort: 8080
+
 ```
 
 > *Replace <ecr-url> with the URL of ECR repository.*
@@ -105,7 +126,7 @@ spec:
 
 > Apply your Kubernetes resources using kubectl:
 
-```kubectl apply -f nginx-tomcat-deployment.yaml```
+```kubectl apply -f nginx-tomcat.yaml```
 
 ![image](https://github.com/Genrih17/eks-cluster/assets/84070046/e66a5a82-3e06-4e21-ae5d-6cc4ac4c5ffe)
 
@@ -133,7 +154,7 @@ spec:
 
 We should have an EKS cluster with a multi-container pod running Nginx and Tomcat, with Nginx accessible from the internet via a LoadBalancer service.
 
-Using LoadBalanser address we can check the result:
+Using LoadBalanser DNSname you can check the result on HTTP port:
 ![image](https://github.com/Genrih17/eks-cluster/assets/84070046/dd1bf2c2-79e0-446e-a2e6-27c2a6ba90f3)
 
 
