@@ -7,6 +7,13 @@
  - a way to deploy eks cluster with either terraform or cloudformation
 
 
+Terraform will creates follow resources:
+ - VPC with 2 privat and 2 public subnets in 2 AZs, with route tables and SG, NACLs;
+ - NAT gateway, internet gateway;
+ - Cluster with nodegroup (based on t3.small instance type);
+ - Pod with nginx and tomcat containers;
+ - Service nginx-service to provide acces to nginx on HTTP port.
+
 **Configure AWS Credentials:**
 
 > Ensure you have your AWS access and secret keys configured either via AWS CLI or environment variables.
@@ -79,6 +86,10 @@ kubectl get services nginx-service --output jsonpath='{.status.loadBalancer.ingr
 ```
 
 > I have ommit the '--auto-approve' flag just to you will see what resourses will be created.
+
+Previous steps with bud and push image can be included in script as well, if needed.
+
+
 
 ## Or you can deploy it manually by following steps:
 
