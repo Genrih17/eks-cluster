@@ -1,46 +1,65 @@
 provider "aws" {
-  region = "eu-central-1" # Change to your region
+  region = var.aws-region
+}
+
+data "aws_availability_zones" "available" {
+  filter {
+    name   = "opt-in-status"
+    values = ["opt-in-not-required"]
+  }
 }
 
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
-  name   = "eks-cluster"
-  cidr   = "10.0.0.0/16"
+  name   = var.vpc_name
+  cidr   = var.vpc_cidr
+  azs    = slice(data.aws_availability_zones.available.names, 0, 2)
+
+  private_subnets = var.vpc_private_subnets
+  public_subnets  = var.vpc_public_subnets
+
+  enable_nat_gateway   = true
+  single_nat_gateway   = true
+  enable_dns_hostnames = true
+
+  tags = {
+    Terraform   = "true"
+    Environment = "dev"
+  }
 }
 
-resource "aws_subnet" "private" {
-  count                   = 2
-  vpc_id                  = module.vpc.vpc_id
-  cidr_block              = element(module.vpc.private_subnets, count.index)
-  availability_zone       = element(module.vpc.availability_zones, count.index)
-  map_public_ip_on_launch = false
+
+
+module "eks" {
+  source          = "terraform-aws-modules/eks/aws"
+  cluster_name    = var.cluster-name
+  cluster_version = "1.27"
+
+  vpc_id                         = module.vpc.vpc_id
+  subnet_ids                     = module.vpc.private_subnets
+  cluster_endpoint_public_access = true
+
+
+  eks_managed_node_groups = {
+    first = {
+      name             = "node-group-1"
+      desired_capacity = 1
+      max_capacity     = 2
+      min_capacity     = 1
+      instance_type    = "t3.small"
+    }
+  }
 }
 
-resource "aws_security_group" "eks_cluster_sg" {
-  name_prefix = "eks-cluster-"
-  vpc_id      = module.vpc.vpc_id
 
-  # Ingress rules (inbound traffic)
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Example: Allow SSH from a specific IP
-  }
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Example: Allow HTTP from anywhere
-  }
-
-  # Egress rules (outbound traffic)
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1" # Allow all outbound traffic
-    cidr_blocks = ["0.0.0.0/0"]
+resource "terraform_data" "config" {
+  depends_on = [module.eks]
+  provisioner "local-exec" {
+    command = "aws eks --region eu-central-1  update-kubeconfig --name eks-cluster"
+    #environment = {
+    #AWS_CLUSTER_NAME = var.cluster-name
+    #REGION           = var.aws-region
+    #}
   }
 }
 

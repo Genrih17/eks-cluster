@@ -1,7 +1,18 @@
 output "eks_cluster_id" {
-  value = aws_eks_cluster.eks_cluster.id
+  value = module.eks.cluster_id
 }
 
-output "eks_cluster_endpoint" {
-  value = aws_eks_cluster.eks_cluster.endpoint
+output "region" {
+  description = "AWS region"
+  value       = var.aws-region
+}
+
+output "cluster_name" {
+  description = "Kubernetes Cluster Name"
+  value       = module.eks.cluster_name
+}
+
+output "cluster_endpoint" {
+  description = "Endpoint for Amazon Web Service EKS "
+  value       = module.eks.cluster_endpoint
 }

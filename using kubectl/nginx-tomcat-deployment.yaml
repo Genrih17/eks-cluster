@@ -1,0 +1,16 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: testpod
+  labels:
+    app: nginx-tomcat
+spec:
+  containers:
+    - name: nginx
+      image: 856866880246.dkr.ecr.eu-central-1.amazonaws.com/nginx
+      ports:
+        - containerPort: 80
+    - name: tomcat
+      image: 856866880246.dkr.ecr.eu-central-1.amazonaws.com/tomcat
+      ports:
+        - containerPort: 8080
