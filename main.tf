@@ -52,14 +52,14 @@ module "eks" {
 }
 
 
-resource "terraform_data" "config" {
-  depends_on = [module.eks]
-  provisioner "local-exec" {
-    command = "aws eks --region eu-central-1  update-kubeconfig --name eks-cluster"
-    #environment = {
-    #AWS_CLUSTER_NAME = var.cluster-name
-    #REGION           = var.aws-region
-    #}
-  }
-}
+#resource "terraform_data" "config" {
+#  depends_on = [module.eks]
+#  provisioner "local-exec" {
+#    command = "aws eks --region eu-central-1  update-kubeconfig --name eks-cluster"
+#    #environment = {
+#    #AWS_CLUSTER_NAME = var.cluster-name
+#    #REGION           = var.aws-region
+#    #}
+#  }
+#}
 
