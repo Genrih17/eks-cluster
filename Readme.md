@@ -135,3 +135,9 @@ We should have an EKS cluster with a multi-container pod running Nginx and Tomca
 
 Using LoadBalanser address we can check the result:
 ![image](https://github.com/Genrih17/eks-cluster/assets/84070046/dd1bf2c2-79e0-446e-a2e6-27c2a6ba90f3)
+
+
+**You can destroy resources after with command:**
+
+
+```terraform destroy```
