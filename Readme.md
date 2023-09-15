@@ -92,7 +92,7 @@ kubectl get services nginx-service --output jsonpath='{.status.loadBalancer.ingr
 
 > I have ommit the '--auto-approve' flag just to you will see what resourses will be created.
 
-Previous steps with bud and push image can be included in script as well, if needed.
+Previous steps with build and push image can be included in script as well, if needed.
 
 
 
